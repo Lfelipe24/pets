@@ -13,16 +13,26 @@ export const Login: React.FC = () => {
     const [emailError, setEmailError] = useState<boolean>(false);
     const [passError, setPassError] = useState<boolean>(false);
 
-    const Login = async(email: string, pass: string) => {
+    const cleanErrors = () => {
         setEmailError(false);
         setPassError(false);
+    };
+
+    const Login = async(email: string, pass: string) => {
+        cleanErrors();
         if (email && password) {
-            console.log(email, pass)
+            return
         } else {
             if (!email) setEmailError(true);
             if (!pass) setPassError(true);
         }
+    };
+
+    const toRegister = () => {
+        cleanErrors();
+        navigation.navigate('Register' as never)
     }
+
     return (
         <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
@@ -58,7 +68,7 @@ export const Login: React.FC = () => {
                         <Text style={tw`text-sky-400 text-xs`}>Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
-                        <Text>Todavía no tienes cuenta?<Text style={tw`text-sky-400`} onPress={() => navigation.navigate('Register' as never)}> Regístrate </Text></Text>
+                        <Text>Todavía no tienes cuenta?<Text style={tw`text-sky-400`} onPress={() => toRegister()}> Regístrate </Text></Text>
                     </View>
                 </View>
             </View>

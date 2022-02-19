@@ -36,6 +36,12 @@ export const Register: React.FC = () => {
             if (!rPass) setRepeatPassError(true);
         }
     };
+
+    const toLogin = () => {
+        cleanErrors();
+        navigation.goBack()
+    };
+
     return (
         <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
@@ -80,7 +86,7 @@ export const Register: React.FC = () => {
                         <Text style={tw`text-white text-lg`}>Registrarse</Text>
                     </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
-                        <Text>Ya tienes una cuenta?<Text style={tw`text-sky-400`} onPress={() => navigation.goBack()}> Ingresa </Text></Text>
+                        <Text>Ya tienes una cuenta?<Text style={tw`text-sky-400`} onPress={() => toLogin()}> Ingresa </Text></Text>
                     </View>
                 </View>
             </View>
