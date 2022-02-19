@@ -6,22 +6,25 @@ import { useNavigation } from '@react-navigation/native';
 
 const logo = require('../../../assets/logo/near-logo.png');
 
-export const Login: React.FC = () => {
+export const Register: React.FC = () => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
-                    <Image style={tw`w-30 h-30`} source={logo}></Image>
+                    <Image style={tw`w-25 h-25`} source={logo}></Image>
                 </View>
                 <View>
-                    <Text style={tw`mt-10 text-3xl`}>¡Bienvenido!</Text>
-                </View>
-                <View>
-                    <Text style={tw`mt-5 text-lg`}>Nos alegra verte por aquí</Text>
+                    <Text style={tw`mt-10 text-lg text-center`}>¡Llena el formulario para completar tu registro!</Text>
                 </View>
                 <View style={tw`w-full`}>
                     <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100`, styles.inputText]}
+                        placeholder='Nombre completo'
+                        defaultValue={''}
+                        textContentType='username'
+                        autoCompleteType='username'
+                    />
+                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={''}
                         textContentType='username'
@@ -34,14 +37,18 @@ export const Login: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
+                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100`, styles.inputText]}
+                        placeholder='Repite tu contraseña'
+                        defaultValue={''}
+                        textContentType='password'
+                        autoCompleteType='password'
+                        secureTextEntry={true}
+                    />
                     <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]}>
-                        <Text style={tw`text-white text-lg`}>Ingresar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={tw`items-center mt-5`}>
-                        <Text style={tw`text-sky-400 text-xs`}>Olvidaste tu contraseña?</Text>
+                        <Text style={tw`text-white text-lg`}>Registrarse</Text>
                     </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
-                        <Text>Todavía no tienes cuenta?<Text style={tw`text-sky-400`} onPress={() => navigation.navigate('Register' as never)}> Regístrate </Text></Text>
+                        <Text>Ya tienes una cuenta?<Text style={tw`text-sky-400`} onPress={() => navigation.goBack()}> Ingresa </Text></Text>
                     </View>
                 </View>
             </View>
