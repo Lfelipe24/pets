@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
 import tw from 'twrnc';
 import { Input } from '../../components/input';
@@ -8,6 +8,21 @@ const logo = require('../../../assets/logo/near-logo.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [emailError, setEmailError] = useState<boolean>(false);
+    const [passError, setPassError] = useState<boolean>(false);
+
+    const Login = async(email: string, pass: string) => {
+        setEmailError(false);
+        setPassError(false);
+        if (email && password) {
+            console.log(email, pass)
+        } else {
+            if (!email) setEmailError(true);
+            if (!pass) setPassError(true);
+        }
+    }
     return (
         <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
@@ -21,20 +36,22 @@ export const Login: React.FC = () => {
                     <Text style={tw`mt-5 text-lg`}>Nos alegra verte por aquí</Text>
                 </View>
                 <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100`, styles.inputText]}
+                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
-                        defaultValue={''}
+                        defaultValue={email}
+                        onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100`, styles.inputText]}
+                    <Input style={[tw`mt-6 px-5 h-12 bg-neutral-100 border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Contraseña'
-                        defaultValue={''}
+                        defaultValue={password}
+                        onChangeText={(password) => setPassword(password)}
                         textContentType='password'
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]}>
+                    <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]} onPress={() => Login(email, password)}>
                         <Text style={tw`text-white text-lg`}>Ingresar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={tw`items-center mt-5`}>
@@ -71,4 +88,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 50
       },
+
+      errorMessage: {
+        position: 'absolute'
+      }
 }); 
