@@ -36,14 +36,14 @@ export const Login: React.FC = () => {
                     <Text style={tw`mt-5 text-lg`}>Nos alegra verte por aquí</Text>
                 </View>
                 <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-6 px-5 h-12 bg-neutral-100 border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-6 px-5 h-12 bg-neutral-100 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         defaultValue={password}
                         onChangeText={(password) => setPassword(password)}
