@@ -14,6 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useStore } from './src/store/root.store';
 import { Ionicons } from '@expo/vector-icons';
+import { DARK_GRAY_APP, BLACK_APP } from './src/style/colors';
 
 function App() {
   const Stack = createNativeStackNavigator();
@@ -26,21 +27,22 @@ function App() {
         <SafeAreaProvider>
           <SafeAreaView style={styles.container}>
             <Tab.Navigator
+              initialRouteName='Home'
               screenOptions={({ route }) => ({
-                tabBarIcon: ({}) => {
+                tabBarIcon: ({focused, color, size}) => {
                   let iconName;
 
                   if (route.name === 'Home') {
-                    iconName = 'home-outline';
+                    iconName = focused ? 'home' : 'home-outline';
                   } else if (route.name === 'Setting') {
-                    iconName = 'settings-outline' ;
+                    iconName = focused ? 'settings' : 'settings-outline' ;
                   } else if (route.name === 'Profile') {
-                    iconName = 'person-outline';
+                    iconName = focused ? 'person' : 'person-outline';
                   }
-                  return <Ionicons name={iconName} size={24} color={'black'} />;
+                  return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: 'tomato',
-                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: BLACK_APP,
+                tabBarInactiveTintColor: DARK_GRAY_APP,
               })}>
               <Tab.Screen name='Profile' component={Profile} options={{ headerShown: false}} />
               <Tab.Screen name='Home' component={Home} options={{ headerShown: false }} />

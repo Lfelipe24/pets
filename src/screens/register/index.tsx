@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity } from "r
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
+import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
@@ -43,7 +44,7 @@ export const Register: React.FC = () => {
     };
 
     return (
-        <SafeAreaView style={[tw` bg-white`, styles.loginContainer]}>
+        <SafeAreaView style={[tw`bg-white`,styles.registerContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
                     <Image style={tw`w-25 h-25`} source={logo}></Image>
@@ -52,21 +53,21 @@ export const Register: React.FC = () => {
                     <Text style={tw`mt-10 text-xl font-bold`}>¡Creá tu cuenta!</Text>
                 </View>
                 <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border border-transparent ${nameError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-12 px-5 h-12 border border-transparent ${nameError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Nombre completo'
                         defaultValue={name}
                         onChangeText={(name) => setName(name)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100 border border-transparent ${PassError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         textContentType='password'
                         defaultValue={password}
@@ -74,7 +75,7 @@ export const Register: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 bg-neutral-100 border border-transparent ${repeatPassError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Repite tu contraseña'
                         textContentType='password'
                         defaultValue={repeatPassword}
@@ -82,11 +83,11 @@ export const Register: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
+                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
                         <Text style={tw`text-white text-lg`}>Registrarse</Text>
                     </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
-                        <Text>Ya tienes una cuenta?<Text style={tw`text-sky-400`} onPress={() => toLogin()}> Ingresa </Text></Text>
+                        <Text>Ya tienes una cuenta?<Text style={styles.text} onPress={() => toLogin()}> Ingresa </Text></Text>
                     </View>
                 </View>
             </View>
@@ -95,7 +96,7 @@ export const Register: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
-    loginContainer: {
+    registerContainer: {
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
@@ -109,11 +110,17 @@ const styles = StyleSheet.create({
     inputText: {
         borderRadius: 50,
         fontSize: 13,
+        backgroundColor: LIGHT_GRAY_APP
       },
 
       buttonWraper: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50
+        borderRadius: 50,
+        backgroundColor: BLUE_APP
       },
+
+      text: {
+          color: BLUE_APP
+      }
 }); 

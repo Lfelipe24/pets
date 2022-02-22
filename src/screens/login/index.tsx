@@ -4,6 +4,7 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
+import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
@@ -46,14 +47,14 @@ export const Login: React.FC = () => {
                     <Text style={tw`mt-8 text-xl font-bold`}>¡Bienvenido!</Text>
                 </View>
                 <View style={tw`w-full mt-15`}>
-                    <Input style={[tw`px-5 h-12 bg-neutral-100 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`px-5 h-12 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-4          px-5 h-12 bg-neutral-100 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-4 px-5 h-12 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         defaultValue={password}
                         onChangeText={(password) => setPassword(password)}
@@ -61,14 +62,14 @@ export const Login: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true} 
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]} onPress={() => Login(email, password)}>
+                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
                         <Text style={tw`text-white text-lg`}>Ingresar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={tw`items-center mt-5`}>
-                        <Text style={tw`text-sky-400 text-xs`}>Olvidaste tu contraseña?</Text>
+                        <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
-                        <Text>Todavía no tienes cuenta?<Text style={tw`text-sky-400`} onPress={() => toRegister()}> Regístrate </Text></Text>
+                        <Text>Todavía no tienes cuenta?<Text style={styles.text} onPress={() => toRegister()}> Regístrate </Text></Text>
                     </View>
                 </View>
             </View>
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
 
     formContainer: {
@@ -91,15 +92,21 @@ const styles = StyleSheet.create({
     inputText: {
         borderRadius: 50,
         fontSize: 13,
+        backgroundColor: LIGHT_GRAY_APP
       },
 
       buttonWraper: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50
+        borderRadius: 50,
+        backgroundColor: BLUE_APP
       },
 
       errorMessage: {
         position: 'absolute'
+      },
+
+      text: {
+          color: BLUE_APP
       }
 }); 
