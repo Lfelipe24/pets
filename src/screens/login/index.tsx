@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 
-const logo = require('../../../assets/logo/near-logo.png');
+const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
@@ -34,32 +34,29 @@ export const Login: React.FC = () => {
     }
 
     return (
-        <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
+        <SafeAreaView style={[tw`bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
                     <Image style={tw`w-30 h-30`} source={logo}></Image>
                 </View>
                 <View>
-                    <Text style={tw`mt-10 text-3xl`}>¡Bienvenido!</Text>
+                    <Text style={tw`mt-8 text-xl font-bold`}>¡Bienvenido!</Text>
                 </View>
-                <View>
-                    <Text style={tw`mt-5 text-lg`}>Nos alegra verte por aquí</Text>
-                </View>
-                <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                <View style={tw`w-full mt-15`}>
+                    <Input style={[tw`px-5 h-12 bg-neutral-100 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-6 px-5 h-12 bg-neutral-100 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-4          px-5 h-12 bg-neutral-100 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         defaultValue={password}
                         onChangeText={(password) => setPassword(password)}
                         textContentType='password'
                         autoCompleteType='password'
-                        secureTextEntry={true}
+                        secureTextEntry={true} 
                     />
                     <TouchableOpacity style={[tw`h-15 mt-12 bg-sky-400`, styles.buttonWraper]} onPress={() => Login(email, password)}>
                         <Text style={tw`text-white text-lg`}>Ingresar</Text>

@@ -4,10 +4,9 @@
     "slug": "pets",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo/pet-logo-temp.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/logo/pet-logo-temp.png",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -21,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo/pet-logo-temp.png",
         "backgroundColor": "#FFFFFF"
       }
     },

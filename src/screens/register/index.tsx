@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 
-const logo = require('../../../assets/logo/near-logo.png');
+const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Register: React.FC = () => {
     const navigation = useNavigation();
@@ -43,13 +43,13 @@ export const Register: React.FC = () => {
     };
 
     return (
-        <SafeAreaView style={[tw`w-max h-max bg-white`, styles.loginContainer]}>
+        <SafeAreaView style={[tw` bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
                     <Image style={tw`w-25 h-25`} source={logo}></Image>
                 </View>
                 <View>
-                    <Text style={tw`mt-10 text-lg text-center`}>¡Llena el formulario para completar tu registro!</Text>
+                    <Text style={tw`mt-10 text-xl font-bold`}>¡Creá tu cuenta!</Text>
                 </View>
                 <View style={tw`w-full`}>
                     <Input style={[tw`mt-12 px-5 h-12 bg-neutral-100 border border-transparent ${nameError? `border border-red-600`: ``}`, styles.inputText]}
