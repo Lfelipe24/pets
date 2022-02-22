@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo/pet-logo-temp.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
