@@ -27,16 +27,16 @@ function App() {
         <SafeAreaProvider>
           <SafeAreaView style={styles.container}>
             <Tab.Navigator
-              initialRouteName='Home'
+              initialRouteName='Mis mascotas'
               screenOptions={({ route }) => ({
                 tabBarIcon: ({focused, color, size}) => {
                   let iconName;
 
-                  if (route.name === 'Home') {
+                  if (route.name === 'Mis mascotas') {
                     iconName = focused ? 'home' : 'home-outline';
-                  } else if (route.name === 'Setting') {
+                  } else if (route.name === 'Configuración') {
                     iconName = focused ? 'settings' : 'settings-outline' ;
-                  } else if (route.name === 'Profile') {
+                  } else if (route.name === 'Perfil') {
                     iconName = focused ? 'person' : 'person-outline';
                   }
                   return <Ionicons name={iconName} size={size} color={color} />;
@@ -44,9 +44,9 @@ function App() {
                 tabBarActiveTintColor: BLACK_APP,
                 tabBarInactiveTintColor: DARK_GRAY_APP,
               })}>
-              <Tab.Screen name='Profile' component={Profile} options={{ headerShown: false}} />
-              <Tab.Screen name='Home' component={Home} options={{ headerShown: false }} />
-              <Tab.Screen name='Setting' component={Setting} options={{ headerShown: false }} />
+              <Tab.Screen name='Perfil' component={Profile} options={{ headerShown: false}} />
+              <Tab.Screen name='Mis mascotas' component={Home} options={{ headerShown: false}} />
+              <Tab.Screen name='Configuración' component={Setting} options={{ headerShown: false }} />
             </Tab.Navigator>
           </SafeAreaView>
         </SafeAreaProvider>
