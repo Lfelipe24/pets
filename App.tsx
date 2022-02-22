@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Home } from './src/screens/home';
 import { Login } from './src/screens/login';
 import { Register } from './src/screens/register';
@@ -7,8 +7,10 @@ import { Register } from './src/screens/register';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { observable } from 'mobx';
+import { useStore } from './src/stores/root.store';
 
-export default function App() {
+function App() {
   const Stack = createNativeStackNavigator();
   const [isLogged, setIsLogged] = useState<boolean>(false);
   return (
@@ -30,6 +32,9 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+
+export default observable(App)
 
 const styles = StyleSheet.create({
   container: {
