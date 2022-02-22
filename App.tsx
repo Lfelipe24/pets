@@ -7,18 +7,18 @@ import { Register } from './src/screens/register';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { observable } from 'mobx';
-import { useStore } from './src/stores/root.store';
+import { observer } from 'mobx-react-lite';
+import { useStore } from './src/store/root.store';
 
 function App() {
   const Stack = createNativeStackNavigator();
-  const [isLogged, setIsLogged] = useState<boolean>(false);
+  const {navigationStore: {loginValue}} = useStore('');
   return (
     <NavigationContainer>
-      {isLogged?
+      {loginValue?
         <SafeAreaProvider>
           <Stack.Navigator>
-            <Stack.Screen name='Home' component={Home}/>
+            <Stack.Screen name='Home' component={Home} options={{headerShown: false}}/>
           </Stack.Navigator>
         </SafeAreaProvider>
       :
@@ -34,7 +34,7 @@ function App() {
 }
 
 
-export default observable(App)
+export default observer(App)
 
 const styles = StyleSheet.create({
   container: {

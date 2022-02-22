@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 
 export const Home: React.FC = () => {
     return (
-        <View>
+        <SafeAreaView>
             <Text>This is the home page</Text>
-        </View>
+        </SafeAreaView>
     );
 }
 

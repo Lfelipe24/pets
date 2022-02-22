@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity } from "r
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
+import { useStore } from '../../store/root.store';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
+    const {navigationStore: {changeLoginValue}} = useStore('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
@@ -21,6 +23,7 @@ export const Login: React.FC = () => {
     const Login = async(email: string, pass: string) => {
         cleanErrors();
         if (email && password) {
+            changeLoginValue(true)
             return
         } else {
             if (!email) setEmailError(true);
