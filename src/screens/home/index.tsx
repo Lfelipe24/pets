@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-nati
 import tw from 'twrnc';
 import { SearchBar, Card, Icon } from 'react-native-elements';
 import { BLUE_APP, LIGHT_GRAY_APP, DARK_GRAY_APP } from '../../style/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 const testPet = require('../../../assets/pets/dog.jpg');
 
 export const Home: React.FC = () => {
     const [searchValue, setSearchValue] = useState<string>('');
+    const [hasData, isHasData] = useState<boolean>(false); // DELETE: Temp for show when have or not data
 
     return (
         <View style={[tw`bg-white px-2`, styles.homeContainer]}>
@@ -22,22 +24,37 @@ export const Home: React.FC = () => {
             <View style={tw`w-full mt-5`}>
                 <Text style={tw`text-center text-lg font-bold`}>Mis mascotas</Text>
             </View>
-            <ScrollView style={tw`mt-5`}>
-                <Card wrapperStyle={tw`items-center`} containerStyle={styles.cardsContainer}>
-                    <View style={styles.imgContainer}>
-                        <Card.Image
-                            style={styles.petImage}
-                            source={testPet}
-                        />
+            <TouchableOpacity style={styles.addIconContainer}>
+                <Ionicons name="add-circle" size={70} color={BLUE_APP} />
+            </TouchableOpacity>
+            {hasData ? (
+                <>
+                    <ScrollView style={tw`mt-5`}>
+                        <Card wrapperStyle={tw`items-center`} containerStyle={styles.cardsContainer}>
+                            <View style={styles.imgContainer}>
+                                <Card.Image
+                                    style={styles.petImage}
+                                    source={testPet}
+                                />
+                            </View>
+                            <Text style={tw`my-3 text-lg font-bold`}>Jack</Text>
+                            <View style={tw`w-full`}>
+                                <TouchableOpacity style={[tw`h-15`, styles.buttonWraper]}>
+                                    <Text style={tw`text-white text-lg`}>Detalles</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </Card>
+                    </ScrollView>
+                </>
+            ) : (
+                <>
+                    <View style={tw`my-5`}>
+                        <Card wrapperStyle={tw`flex justify-center items-center py-5`} containerStyle={styles.cardsContainer}>
+                            <Text style={tw`text-center text-base py-5`}>Pulsa el icono de <Ionicons name="add-circle" size={24} color={DARK_GRAY_APP} /> para agregar una nueva mascota</Text>
+                        </Card>
                     </View>
-                    <Text style={tw`my-3 text-lg font-bold`}>Jack</Text>
-                    <View style={tw`w-full`}>
-                        <TouchableOpacity style={[tw`h-15`, styles.buttonWraper]}>
-                            <Text style={tw`text-white text-lg`}>Detalles</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Card>
-            </ScrollView>
+                </>
+            )}
         </View >
     );
 }
@@ -82,4 +99,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: BLUE_APP
     },
+
+    addText: {
+        backgroundColor: 'red'
+    },
+
+    addIconContainer: {
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
+    }
 });
