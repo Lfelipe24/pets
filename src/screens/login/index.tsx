@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
-
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
@@ -20,6 +19,20 @@ export const Login: React.FC = () => {
     const cleanErrors = () => {
         setEmailError(false);
         setPassError(false);
+    };
+
+    const Login = async(email: string, pass: string) => {
+        cleanErrors();
+        if (email && pass) {
+            const response = await firebaseLogin(email, pass);
+            if (response) {
+                changeLoginValue(true)
+            }
+            return
+        } else {
+            if (!email) setEmailError(true);
+            if (!pass) setPassError(true);
+        }
     };
 
     const toRegister = () => {
@@ -52,9 +65,19 @@ export const Login: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true} 
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => firebaseLogin(email, password)}>
-                        <Text style={tw`text-white text-lg`}>Ingresar</Text>
-                    </TouchableOpacity>
+                    {loading? 
+                        <>
+                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
+                                <ActivityIndicator size="large" color="#fff" />
+                            </TouchableOpacity>
+                        </>
+                    :
+                        <>
+                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
+                                <Text style={tw`text-white text-lg`}>Ingresar</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
                     <TouchableOpacity style={tw`items-center mt-5`}>
                         <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>

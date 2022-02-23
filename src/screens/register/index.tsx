@@ -96,7 +96,7 @@ export const Register: React.FC = observer(() => {
                     {loading? 
                         <>
                             <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
-                            <ActivityIndicator size="large" color="#fff" />
+                                <ActivityIndicator size="large" color="#fff" />
                             </TouchableOpacity>
                         </>
                     :

@@ -9,7 +9,16 @@ export const AuthStore = types.model({
     .actions(self => {
         // Login with firebase auth service
         const firebaseLogin = flow(function* (email: string, pass: string) {
-            // firebase code
+            self.loading = true;
+            try {
+                const response = yield signInWithEmailAndPassword(auth, email, pass);
+                if (response.user.uid) {
+                    return true;
+                }
+            } catch (error) {
+            } finally{
+                self.loading = false;
+            }
         });
 
         const firebaseRegister = flow(function* (email: string, pass: string) {
