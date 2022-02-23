@@ -6,11 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
 
+
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
-    const {navigationStore: {changeLoginValue}} = useStore('');
+    const {navigationStore: {changeLoginValue}, authStore:{firebaseLogin, loading}} = useStore('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
@@ -19,17 +20,6 @@ export const Login: React.FC = () => {
     const cleanErrors = () => {
         setEmailError(false);
         setPassError(false);
-    };
-
-    const Login = async(email: string, pass: string) => {
-        cleanErrors();
-        if (email && password) {
-            changeLoginValue(true)
-            return
-        } else {
-            if (!email) setEmailError(true);
-            if (!pass) setPassError(true);
-        }
     };
 
     const toRegister = () => {
@@ -62,7 +52,7 @@ export const Login: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true} 
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
+                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => firebaseLogin(email, password)}>
                         <Text style={tw`text-white text-lg`}>Ingresar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={tw`items-center mt-5`}>

@@ -1,11 +1,13 @@
 import { applySnapshot, Instance, types } from "mobx-state-tree";
-import {useMemo} from 'react';
+import { useMemo } from 'react';
 
-import {NavigationStore, initNavigationStore} from './navigation-store/navigation-store';
+import { NavigationStore, initNavigationStore } from './navigation-store/navigation-store';
+import { AuthStore, initAuthStore } from './auth-store/auth-store';
 
 const RootStore = types.model({
     loading: types.boolean,
-    navigationStore: NavigationStore
+    navigationStore: NavigationStore,
+    authStore: AuthStore
 });
 
 export type RootStoreType = Instance<typeof RootStore>;
@@ -14,10 +16,11 @@ let store: RootStoreType;
 
 export function intializeRootStore(snapshot = null) {
     const _store = store ??
-    RootStore.create({
-        loading: false,
-        navigationStore: initNavigationStore()
-    });
+        RootStore.create({
+            loading: false,
+            navigationStore: initNavigationStore(),
+            authStore: initAuthStore(),
+        });
     if (snapshot) {
         applySnapshot(_store, snapshot);
     }

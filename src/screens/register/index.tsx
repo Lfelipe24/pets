@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
+import { useStore } from '../../store/root.store';
+import { observer } from 'mobx-react-lite';
 import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
-export const Register: React.FC = () => {
+export const Register: React.FC = observer(() => {
     const navigation = useNavigation();
+    const {authStore:{loading, firebaseRegister}, navigationStore:{changeLoginValue}} = useStore('');
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -29,7 +32,14 @@ export const Register: React.FC = () => {
     const SignUp = async(name: string, email: string, pass: string, rPass: string ) => {
         cleanErrors();
         if (name && email && pass && rPass) {
-            console.log(email, pass)
+            const response = await firebaseRegister(email, pass);
+            if (response) {
+                setName(''),
+                setEmail('');
+                setPassword('');
+                setRepeatPassword('');
+                changeLoginValue(true);
+            }
         } else {
             if (!name) setNameError(true);
             if (!email) setEmailError(true);
@@ -83,9 +93,19 @@ export const Register: React.FC = () => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
-                        <Text style={tw`text-white text-lg`}>Registrarse</Text>
-                    </TouchableOpacity>
+                    {loading? 
+                        <>
+                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
+                            <ActivityIndicator size="large" color="#fff" />
+                            </TouchableOpacity>
+                        </>
+                    :
+                        <>
+                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
+                                <Text style={tw`text-white text-lg`}>Registrarse</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
                     <View style={tw`items-center mt-10`}>
                         <Text>Ya tienes una cuenta?<Text style={styles.text} onPress={() => toLogin()}> Ingresa </Text></Text>
                     </View>
@@ -93,7 +113,7 @@ export const Register: React.FC = () => {
             </View>
         </SafeAreaView>
     );
-}
+})
 
 const styles = StyleSheet.create({
     registerContainer: {
