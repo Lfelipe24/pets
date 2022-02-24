@@ -26,7 +26,7 @@ export const Login: React.FC = () => {
         if (email && pass) {
             const response = await firebaseLogin(email, pass);
             if (response) {
-                changeLoginValue(true)
+                changeLoginValue(true);
             }
             return
         } else {

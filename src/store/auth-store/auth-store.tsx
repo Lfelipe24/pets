@@ -20,6 +20,7 @@ export const AuthStore = types.model({
                     return true;
                 }
             } catch (error) {
+                console.error(error)
             } finally {
                 self.loading = false;
             }
@@ -33,6 +34,7 @@ export const AuthStore = types.model({
                     return true;
                 }
             } catch (error) {
+                console.error(error)
             } finally {
                 self.loading = false;
             }
@@ -43,6 +45,7 @@ export const AuthStore = types.model({
             try {
                 yield signOut(auth);
             } catch (error) {
+                console.error(error)
             } finally {
                 self.loading = false;
                 return true;

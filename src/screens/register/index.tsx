@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { Overlay } from 'react-native-elements';
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import { observer } from 'mobx-react-lite';
-import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
+import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP } from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Register: React.FC = observer(() => {
     const navigation = useNavigation();
-    const {authStore:{loading, firebaseRegister}, navigationStore:{changeLoginValue}} = useStore('');
+    const { authStore: { loading, firebaseRegister }, navigationStore: { changeLoginValue } } = useStore('');
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -22,20 +23,30 @@ export const Register: React.FC = observer(() => {
     const [PassError, setPassError] = useState<boolean>(false);
     const [repeatPassError, setRepeatPassError] = useState<boolean>(false);
 
+    // error text alerts
+    const [showErrorEmailOverlay, setErrorEmailShowOverlay] = useState<boolean>(false);
+    const [showErrorMinPassOverlay, setErrorMinPassShowOverlay] = useState<boolean>(false);
+    const [showErrorRepPassOverlay, setErrorRepPassShowOverlay] = useState<boolean>(false);
+
     const cleanErrors = () => {
         setNameError(false);
         setEmailError(false);
         setPassError(false);
-        setRepeatPassError(false)
+        setRepeatPassError(false);
     }
 
-    const SignUp = async(name: string, email: string, pass: string, rPass: string ) => {
+    const SignUp = async (name: string, email: string, pass: string, rPass: string) => {
         cleanErrors();
         if (name && email && pass && rPass) {
+            const verifyEmailError = verifyEmail();
+            const verifyPassError = verifyPassword();
+            if (verifyPassError) return;
+            if (verifyEmailError) return
+
             const response = await firebaseRegister(email, pass);
             if (response) {
                 setName(''),
-                setEmail('');
+                    setEmail('');
                 setPassword('');
                 setRepeatPassword('');
                 changeLoginValue(true);
@@ -48,13 +59,76 @@ export const Register: React.FC = observer(() => {
         }
     };
 
+    const verifyEmail = () => {
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (reg.test(email) === false) {
+            setEmailError(true);
+            setErrorEmailShowOverlay(true);
+            showErrorEmail();
+            return true;
+        }
+    };
+
+    const verifyPassword = () => {
+        if (password != repeatPassword) {
+            setPassError(true);
+            setRepeatPassError(true);
+            setErrorRepPassShowOverlay(true)
+            showErrorRepPass();
+            return true;
+        }
+
+        if (password.length <= 5) {
+            setPassError(true);
+            setErrorMinPassShowOverlay(true)
+            showErrorMinPass();
+            return true
+        }
+    };
+
     const toLogin = () => {
         cleanErrors();
         navigation.goBack()
     };
 
+    const showErrorEmail = () => {
+        return (
+            <Overlay isVisible={showErrorEmailOverlay} onBackdropPress={() => setErrorEmailShowOverlay(false)}>
+                <Text>¡Correo electronico invalido!</Text>
+                <Text>El correo electronico posee un formato no valido, por favor ingresar un correo con formato example@gmail.com</Text>
+                <TouchableOpacity>
+                    <Text>Cerrar</Text>
+                </TouchableOpacity>
+            </Overlay>
+        );
+    }
+
+    const showErrorMinPass = () => {
+        return (
+            <Overlay isVisible={showErrorMinPassOverlay} onBackdropPress={() => setErrorMinPassShowOverlay(false)}>
+                <Text>¡Tamaño de la contraseña Invalido!</Text>
+                <Text>El tamaño de la contraseña debe ser mayor a 6 caracteres</Text>
+                <TouchableOpacity>
+                    <Text>Cerrar</Text>
+                </TouchableOpacity>
+            </Overlay>
+        );
+    }
+
+    const showErrorRepPass = () => {
+        return (
+            <Overlay isVisible={showErrorRepPassOverlay} onBackdropPress={() => setErrorRepPassShowOverlay(false)}>
+                <Text>¡Contraseñas diferentes!</Text>
+                <Text>Las contraseñas ingresadas no coinciden, por favor, ingresalas nuevamente</Text>
+                <TouchableOpacity>
+                    <Text>Cerrar</Text>
+                </TouchableOpacity>
+            </Overlay>
+        );
+    }
+
     return (
-        <SafeAreaView style={[tw`bg-white`,styles.registerContainer]}>
+        <SafeAreaView style={[tw`bg-white`, styles.registerContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
                     <Image style={tw`w-25 h-25`} source={logo}></Image>
@@ -63,21 +137,21 @@ export const Register: React.FC = observer(() => {
                     <Text style={tw`mt-10 text-xl font-bold`}>¡Creá tu cuenta!</Text>
                 </View>
                 <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 border border-transparent ${nameError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-12 px-5 h-12 border border-transparent ${nameError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Nombre completo'
                         defaultValue={name}
                         onChangeText={(name) => setName(name)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${emailError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         textContentType='password'
                         defaultValue={password}
@@ -85,7 +159,7 @@ export const Register: React.FC = observer(() => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Repite tu contraseña'
                         textContentType='password'
                         defaultValue={repeatPassword}
@@ -93,13 +167,13 @@ export const Register: React.FC = observer(() => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    {loading? 
+                    {loading ?
                         <>
                             <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
                                 <ActivityIndicator size="large" color="#fff" />
                             </TouchableOpacity>
                         </>
-                    :
+                        :
                         <>
                             <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
                                 <Text style={tw`text-white text-lg`}>Registrarse</Text>
@@ -111,6 +185,9 @@ export const Register: React.FC = observer(() => {
                     </View>
                 </View>
             </View>
+            {showErrorEmail()}
+            {showErrorMinPass()}
+            {showErrorRepPass()}
         </SafeAreaView>
     );
 })
@@ -131,16 +208,37 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         fontSize: 13,
         backgroundColor: LIGHT_GRAY_APP
-      },
+    },
 
-      buttonWraper: {
+    buttonWraper: {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
         backgroundColor: BLUE_APP
-      },
+    },
 
-      text: {
-          color: BLUE_APP
-      }
+    text: {
+        color: BLUE_APP
+    },
+
+    errorMsg: {
+        position: "absolute",
+        bottom: 140,
+        width: '100%',
+    },
+
+    errorText: {
+        color: RED_ALERT_APP
+    },
+
+    textPrimary: {
+        marginVertical: 20,
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    textSecondary: {
+        marginBottom: 10,
+        textAlign: 'center',
+        fontSize: 17,
+    },
 }); 
