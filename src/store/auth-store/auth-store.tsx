@@ -1,8 +1,8 @@
 import { types, Instance, flow } from 'mobx-state-tree';
 import { auth } from '../../../firebase/firebase-config';
 import {
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
 
@@ -39,7 +39,14 @@ export const AuthStore = types.model({
         })
 
         const firebaseSignOut = flow(function* () {
-            // firebase code
+            self.loading = true;
+            try {
+                yield signOut(auth);
+            } catch (error) {
+            } finally {
+                self.loading = false;
+                return true;
+            }
         });
 
         return {
