@@ -1,6 +1,10 @@
 import { types, Instance, flow } from 'mobx-state-tree';
 import { auth } from '../../../firebase/firebase-config';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    signOut,
+} from 'firebase/auth';
 
 export const AuthStore = types.model({
     loading: types.boolean,
@@ -16,7 +20,7 @@ export const AuthStore = types.model({
                     return true;
                 }
             } catch (error) {
-            } finally{
+            } finally {
                 self.loading = false;
             }
         });
@@ -29,7 +33,7 @@ export const AuthStore = types.model({
                     return true;
                 }
             } catch (error) {
-            } finally{
+            } finally {
                 self.loading = false;
             }
         })
