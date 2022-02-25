@@ -23,11 +23,6 @@ export const Register: React.FC = observer(() => {
     const [PassError, setPassError] = useState<boolean>(false);
     const [repeatPassError, setRepeatPassError] = useState<boolean>(false);
 
-    // error text alerts
-    const [showErrorEmailOverlay, setErrorEmailShowOverlay] = useState<boolean>(false);
-    const [showErrorMinPassOverlay, setErrorMinPassShowOverlay] = useState<boolean>(false);
-    const [showErrorRepPassOverlay, setErrorRepPassShowOverlay] = useState<boolean>(false);
-
     const cleanErrors = () => {
         setNameError(false);
         setEmailError(false);
@@ -46,7 +41,7 @@ export const Register: React.FC = observer(() => {
             const response = await firebaseRegister(email, pass);
             if (response) {
                 setName(''),
-                    setEmail('');
+                setEmail('');
                 setPassword('');
                 setRepeatPassword('');
                 changeLoginValue(true);
@@ -63,26 +58,15 @@ export const Register: React.FC = observer(() => {
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (reg.test(email) === false) {
             setEmailError(true);
-            setErrorEmailShowOverlay(true);
-            showErrorEmail();
             return true;
         }
     };
 
     const verifyPassword = () => {
-        if (password != repeatPassword) {
+        if (password != repeatPassword || password.length <= 5) {
             setPassError(true);
             setRepeatPassError(true);
-            setErrorRepPassShowOverlay(true)
-            showErrorRepPass();
             return true;
-        }
-
-        if (password.length <= 5) {
-            setPassError(true);
-            setErrorMinPassShowOverlay(true)
-            showErrorMinPass();
-            return true
         }
     };
 
@@ -90,42 +74,6 @@ export const Register: React.FC = observer(() => {
         cleanErrors();
         navigation.goBack()
     };
-
-    const showErrorEmail = () => {
-        return (
-            <Overlay isVisible={showErrorEmailOverlay} onBackdropPress={() => setErrorEmailShowOverlay(false)}>
-                <Text>¡Correo electronico invalido!</Text>
-                <Text>El correo electronico posee un formato no valido, por favor ingresar un correo con formato example@gmail.com</Text>
-                <TouchableOpacity>
-                    <Text>Cerrar</Text>
-                </TouchableOpacity>
-            </Overlay>
-        );
-    }
-
-    const showErrorMinPass = () => {
-        return (
-            <Overlay isVisible={showErrorMinPassOverlay} onBackdropPress={() => setErrorMinPassShowOverlay(false)}>
-                <Text>¡Tamaño de la contraseña Invalido!</Text>
-                <Text>El tamaño de la contraseña debe ser mayor a 6 caracteres</Text>
-                <TouchableOpacity>
-                    <Text>Cerrar</Text>
-                </TouchableOpacity>
-            </Overlay>
-        );
-    }
-
-    const showErrorRepPass = () => {
-        return (
-            <Overlay isVisible={showErrorRepPassOverlay} onBackdropPress={() => setErrorRepPassShowOverlay(false)}>
-                <Text>¡Contraseñas diferentes!</Text>
-                <Text>Las contraseñas ingresadas no coinciden, por favor, ingresalas nuevamente</Text>
-                <TouchableOpacity>
-                    <Text>Cerrar</Text>
-                </TouchableOpacity>
-            </Overlay>
-        );
-    }
 
     return (
         <SafeAreaView style={[tw`bg-white`, styles.registerContainer]}>
@@ -152,7 +100,7 @@ export const Register: React.FC = observer(() => {
                         autoCompleteType='username'
                     />
                     <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError ? `border border-red-600` : ``}`, styles.inputText]}
-                        placeholder='Contraseña'
+                        placeholder='Contraseña mayor a 6 caracteres'
                         textContentType='password'
                         defaultValue={password}
                         onChangeText={(password) => setPassword(password)}
@@ -185,9 +133,6 @@ export const Register: React.FC = observer(() => {
                     </View>
                 </View>
             </View>
-            {showErrorEmail()}
-            {showErrorMinPass()}
-            {showErrorRepPass()}
         </SafeAreaView>
     );
 })
@@ -231,14 +176,7 @@ const styles = StyleSheet.create({
         color: RED_ALERT_APP
     },
 
-    textPrimary: {
-        marginVertical: 20,
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    textSecondary: {
-        marginBottom: 10,
-        textAlign: 'center',
-        fontSize: 17,
-    },
+    errorOverlay: {
+        borderRadius: 20,
+    }
 }); 
