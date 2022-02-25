@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
-import { Overlay } from 'react-native-elements';
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';

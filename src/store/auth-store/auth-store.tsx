@@ -1,12 +1,13 @@
 import { types, Instance, flow } from 'mobx-state-tree';
 import { auth, db } from '../../../firebase/firebase-config';
 import {
+    UserCredential,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
-
-import {doc, setDoc} from 'firebase/firestore';
+import {doc, setDoc, getDoc, DocumentSnapshot} from 'firebase/firestore';
+import {LocalStorage} from '../../utils/local-storage';
 
 export const AuthStore = types.model({
     loading: types.boolean,
@@ -17,9 +18,13 @@ export const AuthStore = types.model({
         const firebaseLogin = flow(function* (email: string, pass: string) {
             self.loading = true;
             try {
-                const response = yield signInWithEmailAndPassword(auth, email, pass);
+                const response: UserCredential = yield signInWithEmailAndPassword(auth, email, pass);
                 if (response.user.uid) {
-                    return true;
+                    const userData: DocumentSnapshot = yield getDoc(doc(db, 'users', response.user.uid));
+                    if (userData.exists()) {
+                        yield LocalStorage.setItem('user_data', JSON.stringify(userData.data()));
+                        return true;
+                    }
                 }
             } catch (error) {
                 console.error(error)
@@ -33,10 +38,12 @@ export const AuthStore = types.model({
             try {
                 const response = yield createUserWithEmailAndPassword(auth, email, pass);
                 if (response.user.uid) {
-                    yield setDoc(doc(db, "users", response.user.uid), {
+                    const userData = {
                         name: name,
                         email: email
-                    })
+                    }
+                    yield setDoc(doc(db, 'users', response.user.uid), { ...userData })
+                    yield LocalStorage.setItem('user_data', JSON.stringify(userData));
                     return true;
                 }
             } catch (error) {
@@ -50,6 +57,7 @@ export const AuthStore = types.model({
             self.loading = true;
             try {
                 yield signOut(auth);
+                yield LocalStorage.removeItem('user_data')
             } catch (error) {
                 console.error(error)
             } finally {
