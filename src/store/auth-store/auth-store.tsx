@@ -1,10 +1,12 @@
 import { types, Instance, flow } from 'mobx-state-tree';
-import { auth } from '../../../firebase/firebase-config';
+import { auth, db } from '../../../firebase/firebase-config';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
+
+import {doc, setDoc} from 'firebase/firestore';
 
 export const AuthStore = types.model({
     loading: types.boolean,
@@ -26,11 +28,15 @@ export const AuthStore = types.model({
             }
         });
 
-        const firebaseRegister = flow(function* (email: string, pass: string) {
+        const firebaseRegister = flow(function* (name: string, email: string, pass: string) {
             self.loading = true;
             try {
                 const response = yield createUserWithEmailAndPassword(auth, email, pass);
                 if (response.user.uid) {
+                    yield setDoc(doc(db, "users", response.user.uid), {
+                        name: name,
+                        email: email
+                    })
                     return true;
                 }
             } catch (error) {

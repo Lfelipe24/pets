@@ -38,7 +38,7 @@ export const Register: React.FC = observer(() => {
             if (verifyPassError) return;
             if (verifyEmailError) return
 
-            const response = await firebaseRegister(email, pass);
+            const response = await firebaseRegister(name, email, pass);
             if (response) {
                 setName(''),
                 setEmail('');
