@@ -31,7 +31,7 @@ export const Register: React.FC = observer(() => {
 
     const cleanForm = () => {
         setName(''),
-        setEmail('');
+            setEmail('');
         setPassword('');
         setRepeatPassword('');
     }
@@ -39,8 +39,8 @@ export const Register: React.FC = observer(() => {
     const SignUp = async (name: string, email: string, pass: string, rPass: string) => {
         cleanErrors();
         if (name && email && pass && rPass) {
-            if(verifyEmail(email)) {
-                if(verifyPassword(pass, rPass)) {
+            if (verifyEmail(email)) {
+                if (verifyPassword(pass, rPass)) {
                     const response = await firebaseRegister(name, email, pass);
                     if (response) {
                         cleanForm()
@@ -106,19 +106,13 @@ export const Register: React.FC = observer(() => {
                         autoCompleteType='password'
                         secureTextEntry={true}
                     />
-                    {loading ?
-                        <>
-                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
-                                <ActivityIndicator size="large" color="#fff" />
-                            </TouchableOpacity>
-                        </>
-                        :
-                        <>
-                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
-                                <Text style={tw`text-white text-lg`}>Registrarse</Text>
-                            </TouchableOpacity>
-                        </>
-                    }
+                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
+                        {loading ?
+                            <ActivityIndicator size="large" color="#fff" />
+                            :
+                            <Text style={tw`text-white text-lg`}>Registrarse</Text>
+                        }
+                    </TouchableOpacity>
                     <View style={tw`items-center mt-10`}>
                         <Text>Ya tienes una cuenta?<Text style={styles.text} onPress={() => toLogin()}> Ingresa </Text></Text>
                     </View>

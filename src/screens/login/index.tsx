@@ -4,13 +4,13 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
-import {BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP} from '../../style/colors';
+import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP } from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
-    const {navigationStore: {changeLoginValue}, authStore:{firebaseLogin, verifyEmail, loading}} = useStore('');
+    const { navigationStore: { changeLoginValue }, authStore: { firebaseLogin, verifyEmail, loading } } = useStore('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
@@ -23,10 +23,10 @@ export const Login: React.FC = () => {
         setLoginError(false)
     };
 
-    const Login = async(email: string, pass: string) => {
+    const Login = async (email: string, pass: string) => {
         cleanErrors();
         if (email && pass) {
-            if(verifyEmail(email)){
+            if (verifyEmail(email)) {
                 const response = await firebaseLogin(email, pass);
                 if (response) {
                     changeLoginValue(true);
@@ -63,34 +63,28 @@ export const Login: React.FC = () => {
                             <Text style={[tw`text-center`, styles.textError]}>Email o contraseña incorrectos</Text>
                         </View>
                     }
-                    <Input style={[tw`px-5 h-12 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`px-5 h-12 border border-transparent ${emailError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
                         onChangeText={(email) => setEmail(email)}
                         textContentType='username'
                         autoCompleteType='username'
                     />
-                    <Input style={[tw`mt-4 px-5 h-12 border border-transparent ${passError? `border border-red-600`: ``}`, styles.inputText]}
+                    <Input style={[tw`mt-4 px-5 h-12 border border-transparent ${passError ? `border border-red-600` : ``}`, styles.inputText]}
                         placeholder='Contraseña'
                         defaultValue={password}
                         onChangeText={(password) => setPassword(password)}
                         textContentType='password'
                         autoCompleteType='password'
-                        secureTextEntry={true} 
+                        secureTextEntry={true}
                     />
-                    {loading? 
-                        <>
-                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
-                                <ActivityIndicator size="large" color="#fff" />
-                            </TouchableOpacity>
-                        </>
-                    :
-                        <>
-                            <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
-                                <Text style={tw`text-white text-lg`}>Ingresar</Text>
-                            </TouchableOpacity>
-                        </>
-                    }
+                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
+                        {loading ?
+                            <ActivityIndicator size="large" color="#fff" />
+                            :
+                            <Text style={tw`text-white text-lg`}>Ingresar</Text>
+                        }
+                    </TouchableOpacity>
                     <TouchableOpacity style={tw`items-center mt-5`}>
                         <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
@@ -119,25 +113,25 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         fontSize: 13,
         backgroundColor: LIGHT_GRAY_APP
-      },
+    },
 
-      buttonWraper: {
+    buttonWraper: {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
         backgroundColor: BLUE_APP
-      },
+    },
 
-      errorMessage: {
+    errorMessage: {
         position: 'absolute',
         top: -25
-      },
+    },
 
-      textError: {
+    textError: {
         color: RED_ALERT_APP
-      },
+    },
 
-      text: {
-          color: BLUE_APP
-      }
+    text: {
+        color: BLUE_APP
+    }
 }); 
