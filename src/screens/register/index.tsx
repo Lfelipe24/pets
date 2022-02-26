@@ -11,7 +11,7 @@ const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Register: React.FC = observer(() => {
     const navigation = useNavigation();
-    const { authStore: { loading, firebaseRegister }, navigationStore: { changeLoginValue } } = useStore('');
+    const { authStore: { loading, firebaseRegister, verifyEmail, verifyPassword }, navigationStore: { changeLoginValue } } = useStore('');
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -29,43 +29,35 @@ export const Register: React.FC = observer(() => {
         setRepeatPassError(false);
     }
 
+    const cleanForm = () => {
+        setName(''),
+        setEmail('');
+        setPassword('');
+        setRepeatPassword('');
+    }
+
     const SignUp = async (name: string, email: string, pass: string, rPass: string) => {
         cleanErrors();
         if (name && email && pass && rPass) {
-            const verifyEmailError = verifyEmail();
-            const verifyPassError = verifyPassword();
-            if (verifyPassError) return;
-            if (verifyEmailError) return
-
-            const response = await firebaseRegister(name, email, pass);
-            if (response) {
-                setName(''),
-                setEmail('');
-                setPassword('');
-                setRepeatPassword('');
-                changeLoginValue(true);
+            if(verifyEmail(email)) {
+                if(verifyPassword(pass, rPass)) {
+                    const response = await firebaseRegister(name, email, pass);
+                    if (response) {
+                        cleanForm()
+                        changeLoginValue(true);
+                    }
+                } else {
+                    setPassError(true);
+                    setRepeatPassError(true);
+                }
+            } else {
+                setEmailError(true);
             }
         } else {
             if (!name) setNameError(true);
             if (!email) setEmailError(true);
             if (!pass) setPassError(true);
             if (!rPass) setRepeatPassError(true);
-        }
-    };
-
-    const verifyEmail = () => {
-        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if (reg.test(email) === false) {
-            setEmailError(true);
-            return true;
-        }
-    };
-
-    const verifyPassword = () => {
-        if (password != repeatPassword || password.length <= 5) {
-            setPassError(true);
-            setRepeatPassError(true);
-            return true;
         }
     };
 

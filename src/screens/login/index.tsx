@@ -4,29 +4,37 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
-import {BLUE_APP, LIGHT_GRAY_APP} from '../../style/colors';
+import {BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP} from '../../style/colors';
 
 const logo = require('../../../assets/logo/pet-logo-temp.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
-    const {navigationStore: {changeLoginValue}, authStore:{firebaseLogin, loading}} = useStore('');
+    const {navigationStore: {changeLoginValue}, authStore:{firebaseLogin, verifyEmail, loading}} = useStore('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
     const [passError, setPassError] = useState<boolean>(false);
+    const [loginError, setLoginError] = useState<boolean>(false);
 
     const cleanErrors = () => {
         setEmailError(false);
         setPassError(false);
+        setLoginError(false)
     };
 
     const Login = async(email: string, pass: string) => {
         cleanErrors();
         if (email && pass) {
-            const response = await firebaseLogin(email, pass);
-            if (response) {
-                changeLoginValue(true);
+            if(verifyEmail(email)){
+                const response = await firebaseLogin(email, pass);
+                if (response) {
+                    changeLoginValue(true);
+                } else {
+                    setLoginError(true)
+                }
+            } else {
+                setEmailError(true)
             }
             return
         } else {
@@ -50,6 +58,11 @@ export const Login: React.FC = () => {
                     <Text style={tw`mt-8 text-xl font-bold`}>¡Bienvenido!</Text>
                 </View>
                 <View style={tw`w-full mt-15`}>
+                    {loginError &&
+                        <View style={[tw`w-full`, styles.errorMessage]}>
+                            <Text style={[tw`text-center`, styles.textError]}>Email o contraseña incorrectos</Text>
+                        </View>
+                    }
                     <Input style={[tw`px-5 h-12 border border-transparent ${emailError? `border border-red-600`: ``}`, styles.inputText]}
                         placeholder='Correo Electronico'
                         defaultValue={email}
@@ -116,7 +129,12 @@ const styles = StyleSheet.create({
       },
 
       errorMessage: {
-        position: 'absolute'
+        position: 'absolute',
+        top: -25
+      },
+
+      textError: {
+        color: RED_ALERT_APP
       },
 
       text: {

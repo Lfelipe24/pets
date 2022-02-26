@@ -68,10 +68,29 @@ export const AuthStore = types.model({
             }
         });
 
+        // Verify format of email in login and register screen.
+        const verifyEmail = (email: string) => {
+            const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+            if (reg.test(email) === false) {
+                return false;
+            }
+            return true;
+        };
+
+        // Verify password in register screen.
+        const verifyPassword = (pass: string, repPass: string) => {
+            if (pass != repPass || pass.length <= 5) {
+                return false;
+            }
+            return true;
+        };
+
         return {
             firebaseLogin,
             firebaseRegister,
-            firebaseSignOut
+            firebaseSignOut,
+            verifyEmail,
+            verifyPassword
         };
     });
 
