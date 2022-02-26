@@ -12,13 +12,12 @@ export const Home: React.FC = () => {
     const [hasData, isHasData] = useState<boolean>(false); // DELETE: Temp for show when have or not data
 
     return (
-        <View style={[tw`bg-white px-2`, styles.homeContainer]}>
+        <View style={[tw`bg-white px-2 py-5`, styles.homeContainer]}>
             <SearchBar
                 platform={'ios'}
                 placeholder={'Buscar'}
                 value={searchValue}
                 onChangeText={(value) => setSearchValue(value)}
-                containerStyle={tw`mt-3`}
                 inputContainerStyle={styles.searchBar}
             />
             <View style={tw`w-full mt-5`}>

@@ -3,11 +3,13 @@ import { useMemo } from 'react';
 
 import { NavigationStore, initNavigationStore } from './navigation-store/navigation-store';
 import { AuthStore, initAuthStore } from './auth-store/auth-store';
+import { ProfileStore, initProfileStore } from './profile-store/profile-store';
 
 const RootStore = types.model({
     loading: types.boolean,
     navigationStore: NavigationStore,
-    authStore: AuthStore
+    authStore: AuthStore,
+    profileStore: ProfileStore
 });
 
 export type RootStoreType = Instance<typeof RootStore>;
@@ -20,6 +22,7 @@ export function intializeRootStore(snapshot = null) {
             loading: false,
             navigationStore: initNavigationStore(),
             authStore: initAuthStore(),
+            profileStore: initProfileStore()
         });
     if (snapshot) {
         applySnapshot(_store, snapshot);
