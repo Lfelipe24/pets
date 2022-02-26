@@ -33,6 +33,7 @@ export const AuthStore = types.model({
             }
         });
 
+        // Register with firebase auth service.
         const firebaseRegister = flow(function* (name: string, email: string, pass: string) {
             self.loading = true;
             try {
@@ -53,6 +54,7 @@ export const AuthStore = types.model({
             }
         })
 
+        // Logout with firebase auth service.
         const firebaseSignOut = flow(function* () {
             self.loading = true;
             try {
