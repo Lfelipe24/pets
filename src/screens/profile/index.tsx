@@ -5,16 +5,18 @@ import tw from 'twrnc';
 import { RED_ALERT_APP, LIGHT_GRAY_APP, MID_GRAY_APP, DARK_GRAY_APP, BLUE_APP } from '../../style/colors';
 import { useStore } from '../../store/root.store';
 import { Ionicons } from '@expo/vector-icons';
+import { LaunchCamera } from '../../components/camera';
 
 export const Profile: React.FC = () => {
     const {
         authStore: { firebaseSignOut },
         navigationStore: { changeLoginValue },
-        profileStore: { getUserData, pickProfileImage, deleteProfileImage, imageProfile }
+        profileStore: { getUserData, pickProfileImage, deleteProfileImage, getCameraPermissions, imageProfile }
     } = useStore('');
     const [username, setUsername] = useState<string>('')
     const [isProfileImage, setIsProfileImage] = useState<boolean>(false);
     const [showImgModal, setShowImgModal] = useState<boolean>(false);
+    const [openCamera, setOpenCamera] = useState<boolean>(false);
 
     useEffect(() => {
         const getUserName = async () => {
@@ -30,10 +32,24 @@ export const Profile: React.FC = () => {
         if (result) {
             setShowImgModal(false);
             setIsProfileImage(true)
-        }
-    }
+        };
+    };
 
-    const deleteImage = async() => {
+    const requestPermissionsCamera = async () => {
+        setShowImgModal(false);
+        const cameraPermissions = await getCameraPermissions();
+        if (cameraPermissions) {
+            setOpenCamera(true);
+        };
+    };
+
+    const openPhoneCamera = () => {
+        return (
+            <LaunchCamera />
+        )
+    };
+
+    const deleteImage = async () => {
         deleteProfileImage();
         setShowImgModal(false);
         setIsProfileImage(false);
@@ -55,7 +71,7 @@ export const Profile: React.FC = () => {
                 <TouchableOpacity style={[tw`py-4 border-b rounded-3xl`, styles.ImgPickerBtn]} onPress={() => pickImage()}>
                     <Text style={[tw`text-lg text-center`, styles.ImgPickerText]}>Editar foto</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[tw`py-4 border-b rounded-3xl`, styles.ImgPickerBtn]}>
+                <TouchableOpacity style={[tw`py-4 border-b rounded-3xl`, styles.ImgPickerBtn]} onPress={() => requestPermissionsCamera()}>
                     <Text style={[tw`text-lg text-center`, styles.ImgPickerText]}>Tomar Foto</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[tw`py-4 rounded-3xl`, styles.ImgPickerBtn]} onPress={() => deleteImage()}>
@@ -66,28 +82,36 @@ export const Profile: React.FC = () => {
     };
 
     return (
-        <View style={[tw`items-center px-2 py-10 bg-white`, styles.container]}>
-            <View>
-                <TouchableOpacity style={[tw`w-40 h-40 rounded-full items-center flex justify-center`, styles.profileImg]} onPress={() => setShowImgModal(true)}>
-                    {isProfileImage ?
-                        <Image source={{ uri: imageProfile }} style={[tw`w-40 h-40 rounded-full`, styles.profileImg]} />
-                        :
-                        <Ionicons name="person" size={70} color={DARK_GRAY_APP} />
-                    }
-                </TouchableOpacity>
-            </View>
-            <View style={tw`mt-5`}>
-                <Text style={tw`text-lg`}>{username}</Text>
-            </View>
-            <View style={tw`absolute bottom-0`}>
-                <TouchableOpacity style={tw`py-5 w-full`} onPress={() => signOut()}>
-                    <Text style={[tw`text-lg`, styles.LogoutText]}>Cerrar Sesión</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={tw`absolute bottom-0`}>
-                {showImgOverlay()}
-            </View>
-        </View>
+        <>
+            {openCamera ?
+                <>
+                    {openPhoneCamera()}
+                </>
+                :
+                <View style={[tw`items-center px-2 py-10 bg-white`, styles.container]}>
+                    <View>
+                        <TouchableOpacity style={[tw`w-40 h-40 rounded-full items-center flex justify-center`, styles.profileImg]} onPress={() => setShowImgModal(true)}>
+                            {isProfileImage ?
+                                <Image source={{ uri: imageProfile }} style={[tw`w-40 h-40 rounded-full`, styles.profileImg]} />
+                                :
+                                <Ionicons name="person" size={70} color={DARK_GRAY_APP} />
+                            }
+                        </TouchableOpacity>
+                    </View>
+                    <View style={tw`mt-5`}>
+                        <Text style={tw`text-lg`}>{username}</Text>
+                    </View>
+                    <View style={tw`absolute bottom-0`}>
+                        <TouchableOpacity style={tw`py-5 w-full`} onPress={() => signOut()}>
+                            <Text style={[tw`text-lg`, styles.LogoutText]}>Cerrar Sesión</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={tw`absolute bottom-0`}>
+                        {showImgOverlay()}
+                    </View>
+                </View>
+            }
+        </>
     );
 }
 
@@ -118,5 +142,5 @@ const styles = StyleSheet.create({
 
     ImgPickerText: {
         color: BLUE_APP
-    }
+    },
 });

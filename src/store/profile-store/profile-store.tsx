@@ -2,6 +2,7 @@ import { types, Instance, flow } from 'mobx-state-tree';
 import { LocalStorage } from '../../utils/local-storage';
 import { UserDataType } from '../../types/profile/profile';
 import * as ImagePicker from 'expo-image-picker';
+import { Camera } from 'expo-camera';
 
 export const ProfileStore = types.model({
     loading: types.boolean,
@@ -26,7 +27,7 @@ export const ProfileStore = types.model({
         });
 
         // Pick image profile in camera roll.
-        const pickProfileImage = flow(function*(){
+        const pickProfileImage = flow(function* () {
             self.loading = true;
             try {
                 let result = yield ImagePicker.launchImageLibraryAsync({
@@ -37,7 +38,7 @@ export const ProfileStore = types.model({
                 });
                 if (!result.cancelled) {
                     self.imageProfile = result.uri;
-                }   
+                }
             } catch (error) {
                 console.error(error);
             } finally {
@@ -46,19 +47,34 @@ export const ProfileStore = types.model({
             }
         });
 
-        // Delete Profile image.
-        const deleteProfileImage = flow(function*(){
+        // Open camera for take a profile photo.
+        const getCameraPermissions = flow(function* () {
             self.loading = true;
             try {
-                self.imageProfile = '';
+                const status = yield Camera.requestCameraPermissionsAsync();
+                if (status != 'granted') {
+                    return true;
+                }
             } catch (error) {
-                
-            }finally {
+                console.error(error);
+            } finally {
                 self.loading = false;
             }
         });
 
-        return { getUserData, pickProfileImage, deleteProfileImage };
+        // Delete Profile image.
+        const deleteProfileImage = flow(function* () {
+            self.loading = true;
+            try {
+                self.imageProfile = '';
+            } catch (error) {
+                console.error(error);
+            } finally {
+                self.loading = false;
+            }
+        });
+
+        return { getUserData, pickProfileImage, deleteProfileImage, getCameraPermissions };
     });
 
 export type ProfileStore = Instance<typeof ProfileStore>;
