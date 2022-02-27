@@ -46,7 +46,19 @@ export const ProfileStore = types.model({
             }
         });
 
-        return { getUserData, pickProfileImage };
+        // Delete Profile image.
+        const deleteProfileImage = flow(function*(){
+            self.loading = true;
+            try {
+                self.imageProfile = '';
+            } catch (error) {
+                
+            }finally {
+                self.loading = false;
+            }
+        });
+
+        return { getUserData, pickProfileImage, deleteProfileImage };
     });
 
 export type ProfileStore = Instance<typeof ProfileStore>;
