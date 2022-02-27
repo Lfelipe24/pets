@@ -64,7 +64,7 @@ export const Profile: React.FC = () => {
                 isVisible={showImgModal}
                 animationType={'fade'}
                 onBackdropPress={() => setShowImgModal(false)}
-                overlayStyle={tw`w-full absolute bottom-0 pb-15 rounded-t-3xl`}
+                overlayStyle={tw`w-full absolute bottom-0 pb-10 rounded-t-3xl`}
                 backdropStyle={tw`h-full`}>
                 <TouchableOpacity style={[tw`py-4 border-b rounded-3xl`, styles.ImgPickerBtn]} onPress={() => pickImage()}>
                     <Text style={[tw`text-lg text-center`, styles.ImgPickerText]}>Editar foto</Text>
