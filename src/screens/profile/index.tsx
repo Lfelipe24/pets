@@ -11,11 +11,10 @@ export const Profile: React.FC = () => {
     const {
         authStore: { firebaseSignOut },
         navigationStore: { changeLoginValue },
-        profileStore: { getUserData, pickProfileImage, deleteProfileImage, imageProfile },
-        cameraStore: { getCameraPermissions }
+        profileStore: { getUserData},
+        cameraStore: { getCameraPermissions, pickProfileImage, deleteProfileImage,  imageProfile, isImageProfile }
     } = useStore('');
-    const [username, setUsername] = useState<string>('')
-    const [isProfileImage, setIsProfileImage] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>('');
     const [showImgModal, setShowImgModal] = useState<boolean>(false);
     const [openCamera, setOpenCamera] = useState<boolean>(false);
 
@@ -32,7 +31,6 @@ export const Profile: React.FC = () => {
         const result = await pickProfileImage();
         if (result) {
             setShowImgModal(false);
-            setIsProfileImage(true)
         };
     };
 
@@ -46,14 +44,13 @@ export const Profile: React.FC = () => {
 
     const openPhoneCamera = () => {
         return (
-            <LaunchCamera />
+            <LaunchCamera closeCamera={() => setOpenCamera(false)}/>
         )
     };
 
     const deleteImage = async () => {
         deleteProfileImage();
         setShowImgModal(false);
-        setIsProfileImage(false);
     };
 
     const signOut = async () => {
@@ -92,7 +89,7 @@ export const Profile: React.FC = () => {
                 <View style={[tw`items-center px-2 py-10 bg-white`, styles.container]}>
                     <View>
                         <TouchableOpacity style={[tw`w-40 h-40 rounded-full items-center flex justify-center`, styles.profileImg]} onPress={() => setShowImgModal(true)}>
-                            {isProfileImage ?
+                            {isImageProfile ?
                                 <Image source={{ uri: imageProfile }} style={[tw`w-40 h-40 rounded-full`, styles.profileImg]} />
                                 :
                                 <Ionicons name="person" size={70} color={DARK_GRAY_APP} />
