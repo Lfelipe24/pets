@@ -11,7 +11,8 @@ export const Profile: React.FC = () => {
     const {
         authStore: { firebaseSignOut },
         navigationStore: { changeLoginValue },
-        profileStore: { getUserData, pickProfileImage, deleteProfileImage, getCameraPermissions, imageProfile }
+        profileStore: { getUserData, pickProfileImage, deleteProfileImage, imageProfile },
+        cameraStore: { getCameraPermissions }
     } = useStore('');
     const [username, setUsername] = useState<string>('')
     const [isProfileImage, setIsProfileImage] = useState<boolean>(false);

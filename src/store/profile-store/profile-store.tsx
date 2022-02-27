@@ -47,21 +47,6 @@ export const ProfileStore = types.model({
             }
         });
 
-        // Open camera for take a profile photo.
-        const getCameraPermissions = flow(function* () {
-            self.loading = true;
-            try {
-                const status = yield Camera.requestCameraPermissionsAsync();
-                if (status != 'granted') {
-                    return true;
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                self.loading = false;
-            }
-        });
-
         // Delete Profile image.
         const deleteProfileImage = flow(function* () {
             self.loading = true;
@@ -74,7 +59,7 @@ export const ProfileStore = types.model({
             }
         });
 
-        return { getUserData, pickProfileImage, deleteProfileImage, getCameraPermissions };
+        return { getUserData, pickProfileImage, deleteProfileImage };
     });
 
 export type ProfileStore = Instance<typeof ProfileStore>;

@@ -4,12 +4,14 @@ import { useMemo } from 'react';
 import { NavigationStore, initNavigationStore } from './navigation-store/navigation-store';
 import { AuthStore, initAuthStore } from './auth-store/auth-store';
 import { ProfileStore, initProfileStore } from './profile-store/profile-store';
+import { CameraStore, initCameraStore } from './camera-store/camera-store';
 
 const RootStore = types.model({
     loading: types.boolean,
     navigationStore: NavigationStore,
     authStore: AuthStore,
-    profileStore: ProfileStore
+    profileStore: ProfileStore,
+    cameraStore: CameraStore,
 });
 
 export type RootStoreType = Instance<typeof RootStore>;
@@ -22,7 +24,8 @@ export function intializeRootStore(snapshot = null) {
             loading: false,
             navigationStore: initNavigationStore(),
             authStore: initAuthStore(),
-            profileStore: initProfileStore()
+            profileStore: initProfileStore(),
+            cameraStore: initCameraStore(),
         });
     if (snapshot) {
         applySnapshot(_store, snapshot);
