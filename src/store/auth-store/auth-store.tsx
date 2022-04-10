@@ -68,6 +68,19 @@ export const AuthStore = types.model({
             }
         });
 
+        // Auth with google firebase authenticatio.
+        const googleAuthSignIn = flow(function*() {
+            self.loading = true;
+            try {
+                // code for google auth, (use expo google auth documentation)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                self.loading = false;
+            }
+
+        });
+
         // Verify format of email in login and register screen.
         const verifyEmail = (email: string) => {
             const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -90,7 +103,8 @@ export const AuthStore = types.model({
             firebaseRegister,
             firebaseSignOut,
             verifyEmail,
-            verifyPassword
+            verifyPassword,
+            googleAuthSignIn
         };
     });
 

@@ -11,7 +11,7 @@ const logo = require('../../../assets/logo/logo.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
-    const { navigationStore: { changeLoginValue }, authStore: { firebaseLogin, verifyEmail, loading } } = useStore('');
+    const { navigationStore: { changeLoginValue }, authStore: { firebaseLogin, verifyEmail, googleAuthSignIn, loading } } = useStore('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
@@ -87,7 +87,7 @@ export const Login: React.FC = () => {
                         }
                     </TouchableOpacity>
                     <View style={tw`flex-row justify-center my-7`}>
-                        <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
+                        <TouchableOpacity onPress={googleAuthSignIn} style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
                             <AntDesign name="google" size={20} color="white" />
                         </TouchableOpacity>
                         <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
