@@ -51,7 +51,7 @@ export const Login: React.FC = () => {
 
     return (
         <SafeAreaView style={[tw`bg-white`, styles.loginContainer]}>
-            <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
+            <View style={[tw`ml-8 mr-8 text-center`, styles.formContainer]}>
                 <View>
                     <Image style={tw`w-40 h-40`} source={logo}></Image>
                 </View>
@@ -86,24 +86,24 @@ export const Login: React.FC = () => {
                             <Text style={tw`text-white text-lg`}>Ingresar</Text>
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity style={tw`items-center mt-5`}>
-                        <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
-                    </TouchableOpacity>
-                    <View style={tw`flex-row justify-center my-5`}>
+                    <View style={tw`flex-row justify-center my-7`}>
                         <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
-                            <AntDesign name="google" size={25} color="white" />
+                            <AntDesign name="google" size={20} color="white" />
                         </TouchableOpacity>
                         <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
-                            <FontAwesome name="facebook" size={25} color="white" />
+                            <FontAwesome name="facebook" size={20} color="white" />
                         </TouchableOpacity>
                         {Platform.OS == "ios" &&
                             <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
-                                <AntDesign name="apple1" size={25} color="white" />
+                                <AntDesign name="apple1" size={20} color="white" />
                             </TouchableOpacity>
                         }
                     </View>
                     <View style={tw`items-center`}>
-                        <Text>Todavía no tienes cuenta?<Text style={styles.text} onPress={() => toRegister()}> Regístrate </Text></Text>
+                        <TouchableOpacity>
+                            <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
+                        </TouchableOpacity>
+                        <Text style={tw`mt-5`}>Todavía no tienes cuenta?<Text style={styles.text} onPress={() => toRegister()}> Regístrate </Text></Text>
                     </View>
                 </View>
             </View>
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
 
     socialMediaWrapper: {
         backgroundColor: BLACK_APP,
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         borderRadius: 100,
     }
 }); 
