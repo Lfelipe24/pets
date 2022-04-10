@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import { LIGHT_GRAY_APP, RED_ALERT_APP, BLACK_APP, DARK_GRAY_APP } from '../../style/colors';
+import { AntDesign, FontAwesome  } from '@expo/vector-icons';
 
 const logo = require('../../../assets/logo/logo.png');
 
@@ -88,7 +89,20 @@ export const Login: React.FC = () => {
                     <TouchableOpacity style={tw`items-center mt-5`}>
                         <Text style={[tw`text-xs`, styles.text]}>Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
-                    <View style={tw`items-center mt-10`}>
+                    <View style={tw`flex-row justify-center my-5`}>
+                        <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
+                            <AntDesign name="google" size={25} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
+                            <FontAwesome name="facebook" size={25} color="white" />
+                        </TouchableOpacity>
+                        {Platform.OS == "ios" &&
+                            <TouchableOpacity style={[tw`mx-5 flex justify-center items-center`, styles.socialMediaWrapper]}>
+                                <AntDesign name="apple1" size={25} color="white" />
+                            </TouchableOpacity>
+                        }
+                    </View>
+                    <View style={tw`items-center`}>
                         <Text>Todavía no tienes cuenta?<Text style={styles.text} onPress={() => toRegister()}> Regístrate </Text></Text>
                     </View>
                 </View>
@@ -133,5 +147,12 @@ const styles = StyleSheet.create({
 
     text: {
         color: DARK_GRAY_APP,
+    },
+
+    socialMediaWrapper: {
+        backgroundColor: BLACK_APP,
+        width: 50,
+        height: 50,
+        borderRadius: 100,
     }
 }); 
