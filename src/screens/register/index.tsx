@@ -5,7 +5,7 @@ import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import { observer } from 'mobx-react-lite';
-import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP } from '../../style/colors';
+import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP, BLACK_APP } from '../../style/colors';
 
 const logo = require('../../../assets/logo/logo.png');
 
@@ -144,11 +144,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        backgroundColor: BLUE_APP
+        backgroundColor: BLACK_APP
     },
 
     text: {
-        color: BLUE_APP
+        color: BLACK_APP,
+        fontWeight: 'bold'
     },
 
     errorMsg: {

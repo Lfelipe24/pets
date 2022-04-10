@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
-import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP } from '../../style/colors';
+import { LIGHT_GRAY_APP, RED_ALERT_APP, BLACK_APP, DARK_GRAY_APP } from '../../style/colors';
 
 const logo = require('../../../assets/logo/logo.png');
 
@@ -52,7 +52,7 @@ export const Login: React.FC = () => {
         <SafeAreaView style={[tw`bg-white`, styles.loginContainer]}>
             <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
                 <View>
-                    <Image style={tw`w-30 h-30`} source={logo}></Image>
+                    <Image style={tw`w-40 h-40`} source={logo}></Image>
                 </View>
                 <View>
                     <Text style={tw`mt-8 text-xl font-bold`}>¡Bienvenido!</Text>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        backgroundColor: BLUE_APP
+        backgroundColor: BLACK_APP
     },
 
     errorMessage: {
@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: BLUE_APP
+        color: DARK_GRAY_APP,
     }
 }); 

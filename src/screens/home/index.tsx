@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
 import tw from 'twrnc';
 import { SearchBar, Card, Icon } from 'react-native-elements';
-import { BLUE_APP, LIGHT_GRAY_APP, DARK_GRAY_APP } from '../../style/colors';
+import { BLACK_APP, LIGHT_GRAY_APP, DARK_GRAY_APP } from '../../style/colors';
 import { Ionicons } from '@expo/vector-icons';
 
 const testPet = require('../../../assets/pets/dog.jpg');
@@ -24,7 +24,7 @@ export const Home: React.FC = () => {
                 <Text style={tw`text-center text-lg font-bold`}>Mis mascotas</Text>
             </View>
             <TouchableOpacity style={styles.addIconContainer}>
-                <Ionicons name="add-circle" size={70} color={BLUE_APP} />
+                <Ionicons name="add-circle" size={70} color={BLACK_APP} />
             </TouchableOpacity>
             {hasData ? (
                 <>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        backgroundColor: BLUE_APP
+        backgroundColor: BLACK_APP
     },
 
     addText: {
