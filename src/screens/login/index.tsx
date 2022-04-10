@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import { BLUE_APP, LIGHT_GRAY_APP, RED_ALERT_APP } from '../../style/colors';
 
-const logo = require('../../../assets/logo/pet-logo-temp.png');
+const logo = require('../../../assets/logo/logo.png');
 
 export const Login: React.FC = () => {
     const navigation = useNavigation();
