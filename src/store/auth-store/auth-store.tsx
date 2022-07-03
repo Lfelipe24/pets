@@ -6,8 +6,10 @@ import {
     signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
-import {doc, setDoc, getDoc, DocumentSnapshot} from 'firebase/firestore';
-import {LocalStorage} from '../../utils/local-storage';
+import { doc, setDoc, getDoc, DocumentSnapshot } from 'firebase/firestore';
+import { LocalStorage } from '../../utils/local-storage';
+
+const firestoreUsersDocName = 'users'
 
 export const AuthStore = types.model({
     loading: types.boolean,
@@ -20,7 +22,7 @@ export const AuthStore = types.model({
             try {
                 const response: UserCredential = yield signInWithEmailAndPassword(auth, email, pass);
                 if (response.user.uid) {
-                    const userData: DocumentSnapshot = yield getDoc(doc(db, 'users', response.user.uid));
+                    const userData: DocumentSnapshot = yield getDoc(doc(db, firestoreUsersDocName, response.user.uid));
                     if (userData.exists()) {
                         yield LocalStorage.setItem('user_data', JSON.stringify(userData.data()));
                         return true;
@@ -40,10 +42,11 @@ export const AuthStore = types.model({
                 const response = yield createUserWithEmailAndPassword(auth, email, pass);
                 if (response.user.uid) {
                     const userData = {
+                        id: response.user.uid,
                         name: name,
                         email: email
                     }
-                    yield setDoc(doc(db, 'users', response.user.uid), { ...userData })
+                    yield setDoc(doc(db, firestoreUsersDocName, response.user.uid), { ...userData })
                     yield LocalStorage.setItem('user_data', JSON.stringify(userData));
                     return true;
                 }
@@ -69,7 +72,7 @@ export const AuthStore = types.model({
         });
 
         // Auth with google firebase authenticatio.
-        const googleAuthSignIn = flow(function*() {
+        const googleAuthSignIn = flow(function* () {
             self.loading = true;
             try {
                 // code for google auth, (use expo google auth documentation)

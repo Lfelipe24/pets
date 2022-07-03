@@ -6,13 +6,14 @@ import { RED_ALERT_APP, LIGHT_GRAY_APP, MID_GRAY_APP, DARK_GRAY_APP, BLUE_APP } 
 import { useStore } from '../../store/root.store';
 import { Ionicons } from '@expo/vector-icons';
 import { LaunchCamera } from '../../components/camera';
+import { observer } from 'mobx-react-lite';
 
-export const Profile: React.FC = () => {
+export const Profile: React.FC = observer(() => {
     const {
         authStore: { firebaseSignOut },
         navigationStore: { changeLoginValue },
         profileStore: { getUserData},
-        cameraStore: { getCameraPermissions, pickProfileImage, deleteProfileImage,  imageProfile, isImageProfile }
+        cameraStore: { getCameraPermissions, pickProfileImage, deleteProfileImage, getProfilePicture,  imageProfile, isImageProfile }
     } = useStore('');
     const [username, setUsername] = useState<string>('');
     const [showImgModal, setShowImgModal] = useState<boolean>(false);
@@ -24,7 +25,8 @@ export const Profile: React.FC = () => {
             if (username) setUsername(username)
 
         };
-        getUserName()
+        getUserName();
+        getProfilePicture();
     }, []);
 
     const pickImage = async () => {
@@ -111,7 +113,7 @@ export const Profile: React.FC = () => {
             }
         </>
     );
-}
+})
 
 const styles = StyleSheet.create({
     container: {

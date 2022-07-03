@@ -1,6 +1,12 @@
 import { types, Instance, flow } from 'mobx-state-tree';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
+import { db } from '../../../firebase/firebase-config';
+import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
+import { LocalStorage } from '../../utils/local-storage';
+import { UserDataType } from '../../types/profile/profile';
+
+const firestoreUsersDocName = 'users'
 
 export const CameraStore = types.model({
     loading: types.boolean,
@@ -24,16 +30,54 @@ export const CameraStore = types.model({
             }
         });
 
+        // Get Profile picture
+        const getProfilePicture = flow(function* () {
+            self.loading = true
+            try {
+                const userData = yield LocalStorage.getItem('user_data')
+                if (userData) {
+                    const user: UserDataType = JSON.parse(userData)
+                    const userDataFromDB = yield getDoc(doc(db, firestoreUsersDocName, user.id));
+                    if (userDataFromDB.exists()) {
+                        const data = userDataFromDB.data()
+                        hasProfileImg(data)
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                self.loading = false
+            }
+        });
+
+        // Validate if the user has a image, if user has profile picture load to local variable imageProfile
+        const hasProfileImg = (userData: UserDataType) => {
+            if (userData.imgUri) {
+                self.imageProfile = userData.imgUri;
+                self.isImageProfile = true;
+            }
+        };
+
         // Take photo and save in store.
         const takePhotoCamera = flow(function* (cameraRef) {
             self.loading = true;
             try {
-                let photo = yield cameraRef.current.takePictureAsync({
+                let result = yield cameraRef.current.takePictureAsync({
                     allowsEditing: true,
                     aspect: [4, 3],
                     quality: 1,
                 });
-                self.imageProfile = photo.uri;
+                const userData = yield LocalStorage.getItem('user_data')
+                if (userData) {
+                    const user: UserDataType = JSON.parse(userData)
+                    const profileImg = {
+                        imgUri: result.uri
+                    }
+                    yield updateDoc(doc(db, firestoreUsersDocName, user.id), { ...profileImg })
+                    self.imageProfile = result.uri;
+                    self.isImageProfile = true;
+                }
+                self.imageProfile = result.uri;
                 self.isImageProfile = true;
             } catch (error) {
                 console.error(error);
@@ -55,8 +99,16 @@ export const CameraStore = types.model({
                     quality: 1,
                 });
                 if (!result.cancelled) {
-                    self.imageProfile = result.uri;
-                    self.isImageProfile = true;
+                    const userData = yield LocalStorage.getItem('user_data')
+                    if (userData) {
+                        const user: UserDataType = JSON.parse(userData)
+                        const profileImg = {
+                            imgUri: result.uri
+                        }
+                        yield updateDoc(doc(db, firestoreUsersDocName, user.id), { ...profileImg })
+                        self.imageProfile = result.uri;
+                        self.isImageProfile = true;
+                    }
                 } else {
                     return false;
                 }
@@ -73,8 +125,13 @@ export const CameraStore = types.model({
         const deleteProfileImage = flow(function* () {
             self.loading = true;
             try {
-                self.imageProfile = '';
-                self.isImageProfile = false;
+                const userData = yield LocalStorage.getItem('user_data')
+                if (userData) {
+                    const user: UserDataType = JSON.parse(userData)
+                    yield updateDoc(doc(db, firestoreUsersDocName, user.id), { imgUri: deleteField() })
+                    self.imageProfile = '';
+                    self.isImageProfile = false;
+                }
             } catch (error) {
                 console.error(error);
             } finally {
@@ -82,7 +139,7 @@ export const CameraStore = types.model({
             }
         });
 
-        return { getCameraPermissions, takePhotoCamera, pickProfileImage, deleteProfileImage };
+        return { getCameraPermissions, takePhotoCamera, pickProfileImage, deleteProfileImage, getProfilePicture };
     });
 
 export type CameraStore = Instance<typeof CameraStore>;
