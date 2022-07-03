@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
 import tw from 'twrnc';
 import { Input } from '../../components/input';
 import { useNavigation } from '@react-navigation/native';
@@ -68,56 +68,62 @@ export const Register: React.FC = observer(() => {
 
     return (
         <SafeAreaView style={[tw`bg-white`, styles.registerContainer]}>
-            <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
-                <View>
-                    <Image style={tw`w-25 h-25`} source={logo}></Image>
-                </View>
-                <View>
-                    <Text style={tw`mt-10 text-xl font-bold`}>¡Creá tu cuenta!</Text>
-                </View>
-                <View style={tw`w-full`}>
-                    <Input style={[tw`mt-12 px-5 h-12 border border-transparent ${nameError ? `border border-red-600` : ``}`, styles.inputText]}
-                        placeholder='Nombre completo'
-                        defaultValue={name}
-                        onChangeText={(name) => setName(name)}
-                        textContentType='username'
-                        autoCompleteType='username'
-                    />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${emailError ? `border border-red-600` : ``}`, styles.inputText]}
-                        placeholder='Correo Electronico'
-                        defaultValue={email}
-                        onChangeText={(email) => setEmail(email)}
-                        textContentType='username'
-                        autoCompleteType='username'
-                    />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError ? `border border-red-600` : ``}`, styles.inputText]}
-                        placeholder='Contraseña mayor a 6 caracteres'
-                        textContentType='password'
-                        defaultValue={password}
-                        onChangeText={(password) => setPassword(password)}
-                        autoCompleteType='password'
-                        secureTextEntry={true}
-                    />
-                    <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError ? `border border-red-600` : ``}`, styles.inputText]}
-                        placeholder='Repite tu contraseña'
-                        textContentType='password'
-                        defaultValue={repeatPassword}
-                        onChangeText={(repeatPass) => setRepeatPassword(repeatPass)}
-                        autoCompleteType='password'
-                        secureTextEntry={true}
-                    />
-                    <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
-                        {loading ?
-                            <ActivityIndicator size="large" color="#fff" />
-                            :
-                            <Text style={tw`text-white text-lg`}>Registrarse</Text>
-                        }
-                    </TouchableOpacity>
-                    <View style={tw`items-center mt-10`}>
-                        <Text>Ya tienes una cuenta?<Text style={styles.text} onPress={() => toLogin()}> Ingresa </Text></Text>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.registerContainer}>
+                <View style={[tw`ml-8 mr-8`, styles.formContainer]}>
+                    <View>
+                        <Image style={tw`w-25 h-25`} source={logo}></Image>
+                    </View>
+                    <View>
+                        <Text style={tw`mt-10 text-xl font-bold`}>¡Creá tu cuenta!</Text>
+                    </View>
+                    <View style={tw`w-full`}>
+                        <Input style={[tw`mt-12 px-5 h-12 border border-transparent ${nameError ? `border border-red-600` : ``}`, styles.inputText]}
+                            placeholder='Nombre completo'
+                            placeholderTextColor={DARK_GRAY_APP}
+                            defaultValue={name}
+                            onChangeText={(name) => setName(name)}
+                            textContentType='username'
+                            autoCompleteType='username'
+                        />
+                        <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${emailError ? `border border-red-600` : ``}`, styles.inputText]}
+                            placeholder='Correo Electronico'
+                            placeholderTextColor={DARK_GRAY_APP}
+                            defaultValue={email}
+                            onChangeText={(email) => setEmail(email)}
+                            textContentType='username'
+                            autoCompleteType='username'
+                        />
+                        <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${PassError ? `border border-red-600` : ``}`, styles.inputText]}
+                            placeholder='Contraseña mayor a 6 caracteres'
+                            placeholderTextColor={DARK_GRAY_APP}
+                            textContentType='password'
+                            defaultValue={password}
+                            onChangeText={(password) => setPassword(password)}
+                            autoCompleteType='password'
+                            secureTextEntry={true}
+                        />
+                        <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError ? `border border-red-600` : ``}`, styles.inputText]}
+                            placeholder='Repite tu contraseña'
+                            placeholderTextColor={DARK_GRAY_APP}
+                            textContentType='password'
+                            defaultValue={repeatPassword}
+                            onChangeText={(repeatPass) => setRepeatPassword(repeatPass)}
+                            autoCompleteType='password'
+                            secureTextEntry={true}
+                        />
+                        <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
+                            {loading ?
+                                <ActivityIndicator size="large" color="#fff" />
+                                :
+                                <Text style={tw`text-white text-lg`}>Registrarse</Text>
+                            }
+                        </TouchableOpacity>
+                        <View style={tw`items-center mt-10`}>
+                            <Text>Ya tienes una cuenta?<Text style={styles.text} onPress={() => toLogin()}> Ingresa </Text></Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 })
