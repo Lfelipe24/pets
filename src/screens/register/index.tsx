@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../../store/root.store';
 import { observer } from 'mobx-react-lite';
 import { LIGHT_GRAY_APP, RED_ALERT_APP, BLACK_APP, DARK_GRAY_APP } from '../../style/colors';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 const logo = require('../../../assets/logo/logo.png');
 
@@ -21,6 +22,8 @@ export const Register: React.FC = observer(() => {
     const [emailError, setEmailError] = useState<boolean>(false);
     const [PassError, setPassError] = useState<boolean>(false);
     const [repeatPassError, setRepeatPassError] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(true);
+    const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(true);
 
     const cleanErrors = () => {
         setNameError(false);
@@ -100,8 +103,29 @@ export const Register: React.FC = observer(() => {
                             defaultValue={password}
                             onChangeText={(password) => setPassword(password)}
                             autoCompleteType='password'
-                            secureTextEntry={true}
+                            secureTextEntry={showPassword}
                         />
+                        {showPassword ? (
+                            <>
+                                <AntDesign
+                                    name='eyeo'
+                                    size={24}
+                                    color={DARK_GRAY_APP}
+                                    style={styles.eyeIconPassword}
+                                    onPress={() => { setShowPassword(false) }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <AntDesign
+                                    name='eye'
+                                    size={24}
+                                    color={DARK_GRAY_APP}
+                                    style={styles.eyeIconPassword}
+                                    onPress={() => { setShowPassword(true) }}
+                                />
+                            </>
+                        )}
                         <Input style={[tw`mt-5 px-5 h-12 border border-transparent ${repeatPassError ? `border border-red-600` : ``}`, styles.inputText]}
                             placeholder='Repite tu contraseña'
                             placeholderTextColor={DARK_GRAY_APP}
@@ -109,8 +133,29 @@ export const Register: React.FC = observer(() => {
                             defaultValue={repeatPassword}
                             onChangeText={(repeatPass) => setRepeatPassword(repeatPass)}
                             autoCompleteType='password'
-                            secureTextEntry={true}
+                            secureTextEntry={showRepeatPassword}
                         />
+                        {showRepeatPassword ? (
+                            <>
+                                <AntDesign
+                                    name='eyeo'
+                                    size={24}
+                                    color={DARK_GRAY_APP}
+                                    style={styles.eyeIconRepeatPassword}
+                                    onPress={() => { setShowRepeatPassword(false) }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <AntDesign
+                                    name='eye'
+                                    size={24}
+                                    color={DARK_GRAY_APP}
+                                    style={styles.eyeIconRepeatPassword}
+                                    onPress={() => { setShowRepeatPassword(true) }}
+                                />
+                            </>
+                        )}
                         <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => SignUp(name, email, password, repeatPassword)}>
                             {loading ?
                                 <ActivityIndicator size="large" color="#fff" />
@@ -169,5 +214,17 @@ const styles = StyleSheet.create({
 
     errorOverlay: {
         borderRadius: 20,
+    },
+
+    eyeIconPassword: {
+        position: 'absolute',
+        right: 15,
+        top: 196,
+    },
+    
+    eyeIconRepeatPassword: {
+        position: 'absolute',
+        right: 15,
+        top: 263,
     }
 }); 

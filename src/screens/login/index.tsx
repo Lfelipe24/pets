@@ -17,6 +17,7 @@ export const Login: React.FC = () => {
     const [emailError, setEmailError] = useState<boolean>(false);
     const [passError, setPassError] = useState<boolean>(false);
     const [loginError, setLoginError] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(true);
 
     const cleanErrors = () => {
         setEmailError(false);
@@ -80,8 +81,29 @@ export const Login: React.FC = () => {
                             onChangeText={(password) => setPassword(password)}
                             textContentType='password'
                             autoCompleteType='password'
-                            secureTextEntry={true}
+                            secureTextEntry={showPassword}
                         />
+                        {showPassword ? (
+                          <>
+                            <AntDesign
+                              name='eyeo'
+                              size={24}
+                              color={DARK_GRAY_APP}
+                              style={styles.eyeIconPassword}
+                              onPress={() => { setShowPassword(false) }}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <AntDesign
+                              name='eye'
+                              size={24}
+                              color={DARK_GRAY_APP}
+                              style={styles.eyeIconPassword}
+                              onPress={() => { setShowPassword(true) }}
+                            />
+                          </>
+                        )}
                         <TouchableOpacity style={[tw`h-15 mt-12`, styles.buttonWraper]} onPress={() => Login(email, password)}>
                             {loading ?
                                 <ActivityIndicator size="large" color="#fff" />
@@ -158,5 +180,12 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 100,
-    }
+    },
+
+    eyeIconPassword: {
+        position: 'absolute',
+        right: 15,
+        top: 75,
+      },
+    
 }); 
